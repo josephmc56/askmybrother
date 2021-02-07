@@ -2,19 +2,20 @@
 subtitle: "[]{#_top .anchor}**[I Did a Deep Dive on Upgrading To
   Terraform v0.14 and This is What I Found]{.ul}**"
 ---
-
-I first became curious on the features of terraforms latest major
-release v0.14, as it is my first upgrade. I had a lot of questions going
-into, questions like, "Can I upgrade directly from the CLI?", "Do I have
-to have to reset the path for the new binaries?", and "How long will
-Terraform continue to offer support for my current version?" After
-reading Terraforms documentation, I felt I had even more. If you share
-these questions, don't worry, this articles aim is to address them. I
+ HashiCorp launched their latest major release v0.14 in early December 2020. However, I didn't 
+ get around to exploring this latest version until January 2020.
+ I had a lot of questions when I first inquired about an upgrade, as it was my first with Terraform.
+ questions like, "Can I upgrade directly from the CLI?", "Do I have 
+ to reset the path for the new binaries?", and "How long will
+Terraform continue to offer support for my current version if I choose to
+postpone the upgrade?" The more I read terraforms documentation the more questions arose about
+new features, expansions of previous features, and bug fixes (minor releases)
+If you share these questions, don't worry, this articles aim is to address them. I
 find when I'm having difficulty understanding things, the best approach
-is to try them out. After trying them out I thought I couldn't be the
-only person with these questions, and so it seemed like a good idea to
-share what I found. If you've upgraded with Terraform before, rest
-assure, the steps are the same as in all previous version. Below is a
+is to try them out. If you're like me and this is your first upgrade or you are just
+wondering if an upgrade is necessary, keep this in mind; a roll back is easily performed in Terraform 
+(we'll get into that more later), so don't be afraid to follow along in lab. If you've upgraded with 
+Terraform before, rest assure, the steps are the same as in all previous version. Below is a
 set of links to help you navigate the document to a specific section.
 Also throughout the article are links to Terraforms documentation to aid
 in your upgrade process.
