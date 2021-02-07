@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>tf_v0.14</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<p>HashiCorp launched their latest major release v0.14 in early December 2020. However, I didn't get around to exploring this latest version until January 2020. I had a lot of questions when I first inquired about an upgrade, as it was my first with Terraform. Questions like, "Can I upgrade directly from the CLI?", "Do I have to reset the path for the new binaries?", and "How long will Terraform continue to offer support for my current version if I choose to postpone the upgrade?" The more I read terraforms documentation the more questions arose about new features, expansions of previous features, and bug fixes (minor releases) If you share these questions, don't worry, this articles aim is to address them. I find when I'm having difficulty understanding things, the best approach is to try them out. If you're like me and this is your first upgrade or you are just wondering if an upgrade is necessary, keep this in mind; a roll back is easily performed in Terraform (we'll get into that more later), so don't be afraid to follow along in lab. If you've upgraded with Terraform before, rest assure, the steps are the same as in all previous version. Below is a set of links to help you navigate the document to a specific section. Also throughout the article are links to Terraforms documentation to aid in your upgrade process.</p>
+<p><a href="#Upgrade_Determination">Upgrade Determination</a></p>
+<p><a href="\l">Upgrade Paths</a></p>
+<p><a href="#Sensitive_Parameter">Sensitive Parameter Explored</a></p>
+<p><u>Download and Installing</u>:</p>
+<p><a href="#Upgrading">Upgrading</a></p>
+<p><a href="#Windows_GUI">Windows GUI</a></p>
+<p><a href="#MAC_OS_Linux">Mac OS/Linux</a></p>
+<p><a href="#Dependency_Lock_File">Dependency Lock File</a></p>
+<p><a href="\l">Upgrade Determination</a></p>
+<p>Performing version updates and upgrades can be daunting, and require lots of analysis. This is especially true in mid to large size enterprises with multiple environments or Workspaces (what Terraform calls environments) where there are often many configurations. Therefore, it’s imperative that all the question that can be answered prior to the upgrade are. Even in a well-planned rollout there may still be unforeseen downtime or other delays. Upgrading to v0.14 series In Terraform is no different and if not thoroughly investigated could have you running more terraform plan and apply commands then necessary to find the errors, or rereading lengthy documentation. There are many factors to consider prior to upgrading; factors such as changes to configurations, loss of some functionality in exchange of newer or updated features, and the amount of effort involved when migrating from one version to the next. Included in these scenarios is how to upgrade. Questions such as organizational size, configuration complexity, and how many versions your team intends to upgrade through? This leads us to some important changes introduced in this latest major release. For instance, the expansion of features such as the <a href="#Sensitive_Parameter">sensitive parameter</a> and brand-new features like the <a href="#Dependency_Lock_File">dependency-lock-file</a>. However, the scope of this blog covers the upgrade process and only touches on some of the newer features in Terraform v0.14 briefly. For further information on the features that could throw an error and force you to change configurations visit Terraforms <a href="https://github.com/hashicorp/terraform/blob/v0.14/CHANGELOG.md">changelog</a> page at Github or this handy blog at <a href="https://itnext.io/upgrading-to-terraform-0-14-experience-warning-18ea3f4bc396">ITNEXT</a> for more information.</p>
+<p><img src="media/image1.tmp" style="width:7.0739in;height:3.92763in" alt="MINGW64:/c/Users/mcclu/downloads/askmybrother" /></p>
+<p><a href="\l">Upgrade Paths</a>Terraforms recommended upgrade path consist of upgrading through all minor releases (a version within a version which contains fixes) before upgrading fully to the next version. This means starting at the lowest minor release and ending at the highest, thereby applying all the bug fixes for that version, and any updates to the provider plugins. If you intend to upgrade through multiple versions, best practice would warn against drastic changes. Mainly because of the changes from one version to the next requires omitting items from a configuration, and future deprecation of some features like versions from the provider block. In short, writing a new plan to meet the version specification, only to rewrite the plan yet again on the next upgrade. In such cases an incremental approach would be best, as Terraform as no plans to sunset any of their previous versions so you should not feel as though you need to bring your version current immediately. Smaller and less complex environments allow for more maneuverability however, and Terraform only recommends these but does not enforce them. Because of this, another option is to skip a version and rewrite your plan once you’ve landed at the desired version. Be warned though about potential problems showing up later, as performing an upgrade in this manner could add to the complexity of configuration changes to your environment, and increase the unknowns. However, if you are only running in a lab, and referencing the local backend, this method should be fine. As an example, in the pictures below, I upgraded from v0.13.5 – 0.14.4.</p>
+<p><img src="media/image2.PNG" style="width:6.46965in;height:2.13572in" /></p>
+<p>When I first started working with Terraform, I simply grabbed the most recent download and never paid any attention to the previous versions, as logic tells me the binaries contain all previous updates. However, complexity grows over time after provisioning infrastructure and writing configuration, therefore more care needs to be taken. To get started on the upgrade process and to download older releases you can go to <a href="https://releases.hashicorp.com/terraform/">https://releases.hashicorp.com/terraform/</a>.</p>
+<p><span id="Sensitive_Parameter" class="anchor"></span></p>
+<p><a href="#home">Sensitive Parameter Explored</a></p>
+<p>The Sensitive parameter is more extensive in v0.14, expanding its behavior to include variables as well. This means that when an expression references the variable which contains the sensitive parameter, the sensitivity value is carried over in order to suppress a value in the CLI output (not the TF state file, which is the default behavior carried over from previous versions). Below is an example configuration I grabbed from <a href="https://github.com/hashicorp/terraform/pull/26183">https://github.com/hashicorp/terraform/pull/26183</a> with also the CLI output included at the bottom.</p>
+<p>terraform {</p>
+<p>experiments = [sensitive_variables]</p>
+<p>}</p>
+<p>variable "foo" {</p>
+<p>sensitive = true</p>
+<p>}</p>
+<p>resource "some_resource" "bar" {</p>
+<p>some_val = var.foo</p>
+<p>}</p>
+<p>CLI Output:</p>
+<p># some_resource.bar will be created</p>
+<p>+ resource "some_resource" "bar" {</p>
+<p>+ id = (known after apply)</p>
+<p>+ some_val = (sensitive)</p>
+<p>}</p>
+<p>Several issues existed within the earlier minor releases, but have since been fixed in v0.14.4. One bug was found when used with data sources (a way for terraform to use data elsewhere in either your local or remote configuration). To avoid problems, any upgrade should be to v0.14.4 and beyond. To view all the bug fixes relating to the sensitive value click <a href="https://github.com/hashicorp/terraform/blob/v0.14/CHANGELOG.md">here</a>.</p>
+<p><a href="\l">Upgrading</a></p>
+<p>I was disappointed to find there is no magic terraform command or set of commands that will grab the binaries of the most recent minor release while also taking a snapshot of your current configuration. What does that mean? It means your kinda stuck performing these actions on your own, similar to an initial download and install. In addition, the command terraform 0.13upgrade is no longer supported in v0.14, and neither is the state snapshot feature. However, it is recommended terraform 0.13upgrade be ran prior to upgrading (records the source address and providers in use), and a following a few steps to manually take a state snapshot. In order to manually make a snapshot of your state Terraform recommends performing actions at the CLI prior to install. If you’ve worked with terraform in the past this shouldn’t be too hard. just as in all previous major releases, the steps are to run terraform init, plan, and apply at the CLI and upgrading though all minor releases. Performing these steps allows you to migrate your current settings and infrastructure to the newer version (a lift and shift).</p>
+<p>The following should be performed in the previous version of Terraform (0.13.6) before upgrading:</p>
+<ul>
+<li><p>Terraform init: initializes the working directory, and a refresh also takes place when the init command is ran, which matches the state file to the actual infrastructure, more information can be found at <a href="https://www.terraform.io/docs/commands/refresh.html">Https://www.terraform.io/docs/commands/refresh.html</a> .</p></li>
+<li><p>Terraform plan: ensures there are no pending changes to the state file, and that the command can be ran. Pending changes can “add additional unknowns”, as said by Terraform. Basically it’s best to make sure your infrastructure and state file are the way you want them.</p></li>
+<li><p>Terraform apply: This is the step that creates a snapshot of your infrastructure prior to upgrading. But Terraform no longer offers the state snapshot feature, meaning the terraform apply command must be ran at least once so it can complete its state format upgrade.</p></li>
+</ul>
+<p><a href="\l">Windows GUI</a></p>
+<p>Since we’re only upgrading and not downloading, we won’t have to change or update the path for the binaries. I’ve included some examples below to illustrate the process. navigate to the downloads page and grab the binaries, find the location in your local file system where the current binaries are kept and replace, move the previously used binaries to an alternate location, and run. For my example, I had created a folder named “Binaries” that held the v0.13 download that existed in the root of C volume, inflated the zip file, and replaced the old binaries.</p>
+<p>1). Navigate to the <a href="https://www.terraform.io/downloads.html">downloads page</a> and grab either the 32- or 64-bit version that matches your system needs</p>
+<p><img src="media/image3.PNG" style="width:5.82292in;height:1.3125in" /></p>
+<p>2). Unzipping the binaries and extracting. At this step you could inflate the binaries to the path location, but for this demonstration I skipped it in order to show Terraforms behavior.</p>
+<p><img src="media/image4.PNG" style="width:6.10502in;height:2.58369in" /></p>
+<p>3). Verifying that even unzipping the file, the path still points to the v0.13 binaries</p>
+<p><img src="media/image5.PNG" style="width:5.87582in;height:1.50021in" /></p>
+<p>4). Moved the new binaries to the folder created to house the previous version binaries, after relocating the older ones. Not doing so will force a rename of the executable, and will prevent Terraform from recognizing the file.</p>
+<p><img src="media/image6.PNG" style="width:6.23004in;height:1.05223in" /></p>
+<p>5). Test that this worked and that the system can call the binaries from any location (the root of C). Note also I intentionally moved out of my Downloads directory to the root of C volume, and was still able to call the binaries.</p>
+<p><img src="media/image7.PNG" style="width:5.81331in;height:1.22934in" /></p>
+<p><a href="\l">MAC OS/Linux</a></p>
+<p>Note: if running in a Linux distro you may need to run sudo apt-get install zip -y and sudo apt-get install unzip in order to download the zip and unzip app to unzip the binaries at step 3.</p>
+<p>1). The first step requires that we navigate to the <a href="https://www.terraform.io/downloads.html">downloads page</a> and copy the link address for the appropriate download, in this scenario I’ll be installing on Ubuntu.</p>
+<p><img src="media/image8.PNG" style="width:5.55286in;height:2.50035in" /></p>
+<p>2). Open your bash or terminal and run wget along with the link address</p>
+<p><img src="media/image9.png" style="width:10.17581in;height:2.2393in" /></p>
+<p>3). Next, we run the unzip command with the download and verify it worked, as noted by the green terraform file (executable)</p>
+<p><img src="media/image10.PNG" style="width:7.54272in;height:1.39603in" /></p>
+<p>4). Now we want to move the binaries into the appropriate folder (Binaries for this example), and verify they are there. At this time ensure there are no other binaries that share the folder or you maybe forced to rename them (Terraform won’t be able to find them if named differently).</p>
+<p><img src="media/image11.png" style="width:4.53068in;height:1.16652in" /></p>
+<p>5) If you’ve set Terraform up before, then you proabably set the enviromental variable. Which at this point you could run a terraform -version cmd to check it’s functionality and be done. This, however, is my first time setting up in Linux so I’ll continue with the process</p>
+<p>- Enter your nano editor by typing nano ~/.profile</p>
+<p>- Once in the editor type export PATH=”$PATH/.Binaries” press ctrl + “x”, save the buffer with Y, then press enter to exit.</p>
+<p>- To finish the process you’ll need to run source ~/.profile</p>
+<p>-Disclaimer: This may mess up your path so you won’t be able to call any of your commands from you bash. If this happens simply type export PATH="/usr/bin:$PATH"</p>
+<p>-And finely verify functionality.</p>
+<p><img src="media/image12.PNG" style="width:5.52083in;height:1.45833in" /></p>
+<p><a href="\l">Dependency Lock File</a></p>
+<p>The last item to configure in the install process is the Dependency Lock File. This is a new feature released with v0.14, locks in your provider when the terraform init command is ran for the first time, and prevents future automatic upgrades to the provider plugins when the terraform init command is ran. Terraform then stores the provider version in the .terraform.lock.hcl (which it uses later to check the version against). The picture below shows some of the file.</p>
+<p><img src="media/image13.PNG" style="width:9.41798in;height:1.65648in" /></p>
+<p>The dependency lock file is Terraforms way to reproduce runs in a reliable manner. So just where would this be useful? Several scenarios exist, within teams and remotely, and in automated environments. Automation in Terraform automatically repeats the steps found in the workflow (init, run, and apply), reproduces these steps multiple times, and each time the chance of a new version of the provider plugin being released increases. Hence the reason behind the creation of the lock file. Below I run though some examples I used from <a href="https://learn.hashicorp.com/tutorials/terraform/provider-versioning?in=terraform/configuration-language&amp;utm_source=WEBSITE&amp;utm_medium=WEB_IO&amp;utm_offer=ARTICLE_PAGE&amp;utm_content=DOCS">HashiCorp learning tutorial</a> including their learning repository, feel free to check it out for more exercises if you find you still need more information on the topic.</p>
+<p><u>Overriding the Behavior:</u></p>
+<p>A few options exist when configuring the version with the .terraform.lock.hcl file. The default setting (where no value is added), specify the version constrain within the provider block(s) in your version.tf file, or commit the .terraform.lock.hcl file In .gitignore.</p>
+<p><u>The Default Setting</u>: as stated above and shown in the previous picture, no value is added to the provider block, and therefore Terraform uses the most recent version of the provider plugin (hashicorp/aws 3.25.0).</p>
+<p><u>Adding a Version Constraint</u>: Here the engineer would specify the version to be used when terraform init command is ran for the first time. Shown in the pictures below as an example, we have two provider blocks, and both have different version numbers to explain the process more thoroughly.</p>
+<ol type="1">
+<li><p>Version specified in the versions.tf file</p></li>
+</ol>
+<blockquote>
+<p><img src="media/image14.jpg" style="width:3.40625in;height:4.53125in" /></p>
+</blockquote>
+<ol start="2" type="1">
+<li><p>Then terraform init</p></li>
+</ol>
+<p><img src="media/image15.PNG" style="width:7.70941in;height:3.84429in" /></p>
+<p>.<u>gitignore:</u> The third option is used simply to tell terraform to ignore the .terraform.lock.hcl file by committing it to your repository in a .gitignore file. This as you guess, tells terraform to ignore it when the terraform init/run commands are used, and thereby reproducing behavior similar to v0.13. In-fact. if the .lock file is not committed to your repo, you will recreate behavior similar to v0.13, but still requires the version argument in the provider block to set the version. The highlighted section in the 2<sup>nd</sup> picture shows this.</p>
+<p>Finally, if you decide to use the dependency lock file the provider can be upgraded later by running terraform init -upgrade, this will bring the current version to the most recent provider plugins. Note that the -upgrade flag will only work as long as the latest version falls within the boundary of the specified constraint in your write. This is specified with the “is greater than” (&gt;=) operator. If you later find you need to downgrade to a lower provider plugin first specify a lower constraint with a “is less than” (&lt;=) operator alongside the -upgrade flag.</p>
+<p>That concludes the download and installation process. Thanks for taking the time to read through and I hope it answers some of the question you had about the upgrade process.</p>
+</body>
+</html>
